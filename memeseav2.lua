@@ -1,4 +1,4 @@
-return redzlib--[[
+--[[
   Dev: Jay
   Game: Roblox-MemeSea
 ]]
