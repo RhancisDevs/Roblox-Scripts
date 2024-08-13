@@ -469,8 +469,8 @@ end
 local _Discord = Tabs.Discord do
   _Discord:AddDiscordInvite({
     Name = "Rimuru Hub",
-    Description = "Join our discord community to receive information about the next update",
-    Logo = "rbxassetid://17382040552",
+    Description = "Join our discord community to be part of our growing non-toxic community",
+    Logo = "rbxassetid://18931621989",
     Invite = "https://discord.com/invite/6qUkVduf"
   })
 end
