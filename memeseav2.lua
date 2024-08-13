@@ -1,8 +1,5 @@
 return redzlib--[[
-  Dev: redz9999
-  Lib: redzLibV5
-  github: REDzHUB
-  
+  Dev: Jay
   Game: Roblox-MemeSea
 ]]
 
