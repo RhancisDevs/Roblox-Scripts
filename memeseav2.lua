@@ -1,5 +1,5 @@
 --[[
-  Dev: Jay
+  Dev: Jay Devs
   Game: Roblox-MemeSea
 ]]
 
@@ -440,7 +440,7 @@ if not _env.LoadedFarm then
 end
 
 local redzlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/REDzHUB/RedzLibV5/main/Source.Lua"))()
-local Window = redzlib:MakeWindow({ Title = "Rimuru X Jay Hub : Meme Sea", SubTitle = "by Jay Devs", SaveFolder = "redzHub-MemeSea.json" })
+local Window = redzlib:MakeWindow({ Title = "Jay x Rimuru Hub : Meme Sea", SubTitle = "by Jay Devs", SaveFolder = "redzHub-MemeSea.json" })
 Window:AddMinimizeButton({
   Button = { Image = "rbxassetid://18927646981", BackgroundTransparency = 0 },
   Corner = { CornerRadius = UDim.new(0, 6) }
@@ -468,10 +468,10 @@ end
 
 local _Discord = Tabs.Discord do
   _Discord:AddDiscordInvite({
-    Name = "Rimuru Hub | Community",
+    Name = "Rimuru Hub",
     Description = "Join our discord community to receive information about the next update",
     Logo = "rbxassetid://17382040552",
-    Invite = "https://discord.com/invite/GVBQNQ9y"
+    Invite = "https://discord.com/invite/6qUkVduf"
   })
 end
 
