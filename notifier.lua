@@ -1,11 +1,11 @@
 -- Configuration
 local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 
--- Function to send uptime to Discord webhook
-local function sendToDiscord(userName, uptime, serverName)
+-- Function to send the current time to Discord webhook
+local function sendToDiscord(currentTime)
     local data = {
-        content = string.format("User: %s\nUptime: %s\nServer: %s", userName, uptime, serverName),
-        username = "Uptime Bot"
+        content = string.format("Current Time (Asia/Manila): %s", currentTime),
+        username = "Time Bot"
     }
 
     local jsonData = game:GetService("HttpService"):JSONEncode(data)
@@ -20,32 +20,28 @@ local function sendToDiscord(userName, uptime, serverName)
     end
 end
 
--- Function to calculate uptime
-local function getUptime(seconds)
-    local days = math.floor(seconds / 86400)
-    local hours = math.floor((seconds % 86400) / 3600)
-    local minutes = math.floor((seconds % 3600) / 60)
+-- Function to get the current time in Asia/Manila timezone
+local function getManilaTime()
+    local utcTime = os.time()  -- Get the current time in UTC
+    local manilaOffset = 8 * 3600  -- Manila is UTC+8
+    local manilaTime = utcTime + manilaOffset  -- Adjust for Manila timezone
 
-    return string.format("%d days, %d hours, %d minutes", days, hours, minutes)
+    -- Convert to a formatted string (YYYY-MM-DD HH:MM:SS)
+    return os.date("%Y-%m-%d %H:%M:%S", manilaTime)
 end
 
 -- Track player uptime
 game.Players.PlayerAdded:Connect(function(player)
-    local joinTime = os.time()
-
-    -- Send uptime every minute
-    local function sendUptimeLoop()
+    -- Send current time every minute
+    local function sendTimeLoop()
         while player.Parent do
-            local currentTime = os.time()
-            local uptimeSeconds = currentTime - joinTime
-            local uptimeString = getUptime(uptimeSeconds)
-            
-            sendToDiscord(player.Name, uptimeString, game.Name) -- send data to Discord
+            local currentTime = getManilaTime()  -- Get the current time in Manila timezone
+            sendToDiscord(currentTime)  -- Send the time to Discord webhook
 
             wait(60)  -- Wait for 1 minute before sending again
         end
     end
 
-    -- Start sending uptime info every 1 minute
-    spawn(sendUptimeLoop)
+    -- Start sending the current time every 1 minute
+    spawn(sendTimeLoop)
 end)
