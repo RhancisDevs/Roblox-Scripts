@@ -1,22 +1,32 @@
 -- Configuration
 local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 
+-- Ensure HTTP Service is enabled
+local httpService = game:GetService("HttpService")
+
 -- Function to send the current time to Discord webhook
 local function sendToDiscord(currentTime)
     local data = {
-        content = string.format("Current Time (Asia/Manila): %s", currentTime),
-        username = "Time Bot"
+        content = string.format("Current Time (Asia/Manila): %s", currentTime)
     }
 
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
-
-    -- Send POST request to the Discord webhook
-    local success, response = pcall(function()
-        game:GetService("HttpService"):PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
+    local jsonData
+    local success, encodeError = pcall(function()
+        jsonData = httpService:JSONEncode(data) -- Encode data to JSON
     end)
 
     if not success then
-        warn("Failed to send data to Discord webhook: " .. response)
+        warn("Failed to encode JSON: " .. encodeError)
+        return
+    end
+
+    -- Send POST request to the webhook
+    local postSuccess, postError = pcall(function()
+        httpService:PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+
+    if not postSuccess then
+        warn("Failed to send POST request: " .. postError)
     end
 end
 
@@ -30,18 +40,15 @@ local function getManilaTime()
     return os.date("%Y-%m-%d %H:%M:%S", manilaTime)
 end
 
--- Track player uptime
-game.Players.PlayerAdded:Connect(function(player)
-    -- Send current time every minute
-    local function sendTimeLoop()
-        while player.Parent do
-            local currentTime = getManilaTime()  -- Get the current time in Manila timezone
-            sendToDiscord(currentTime)  -- Send the time to Discord webhook
+-- Send current time every minute
+local function sendTimeLoop()
+    while true do
+        local currentTime = getManilaTime()  -- Get the current time in Manila timezone
+        sendToDiscord(currentTime)  -- Send the time to the webhook
 
-            wait(60)  -- Wait for 1 minute before sending again
-        end
+        wait(60)  -- Wait for 1 minute before sending again
     end
+end
 
-    -- Start sending the current time every 1 minute
-    spawn(sendTimeLoop)
-end)
+-- Start the time loop
+spawn(sendTimeLoop)
