@@ -6,7 +6,7 @@ local fishName = nil
 local findingReel = true
 
 local desiredRarities = { "Exotic", "Secret" }
-local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke" }
+local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke", "Trout" }
 
 local rarityLookup, fishLookup = {}, {}
 for _, v in ipairs(desiredRarities) do rarityLookup[v] = true end
