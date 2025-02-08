@@ -1,7 +1,7 @@
 if _G.JayLoggerRunning then return end
 _G.JayLoggerRunning = true
 
-local current_ver = "1.0.1"
+local current_ver = "1.0.0"
 
 local jay = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
@@ -17,7 +17,12 @@ local playerGui = lp:FindFirstChild("PlayerGui")
 
 local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 local repoURL = "https://raw.githubusercontent.com/RhancisDevs/Roblox-Scripts/main/fish-caught.lua"
-local versionFile = "Latestver.txt"
+local versionDir = "Jay Fisch"
+local versionFile = versionDir .. "/Latestver.json"
+
+if not isfolder(versionDir) then
+    makefolder(versionDir)
+end
 
 local function fetchLatestScript()
     local success, response = pcall(function()
@@ -36,7 +41,9 @@ end
 
 local function readLocalVersion()
     if isfile(versionFile) then
-        return readfile(versionFile)
+        local content = readfile(versionFile)
+        local data = game:GetService("HttpService"):JSONDecode(content)
+        return data.version
     end
     return nil
 end
@@ -48,7 +55,7 @@ local function updateScript()
         local currentVersion = readLocalVersion()
 
         if latestVersion and latestVersion ~= current_ver then
-            writefile(versionFile, latestVersion)
+            writefile(versionFile, game:GetService("HttpService"):JSONEncode({ version = latestVersion }))
             loadstring(latestScript)()
         end
     else
