@@ -60,15 +60,27 @@ local function fetchFishRarity(fish)
         end)
 
         if success and response and response.Body then
-            local data = httpService:JSONDecode(response.Body)
-            fishRarity = data.info
+            local successDecode, data = pcall(function()
+                return httpService:JSONDecode(response.Body)
+            end)
+
+            if successDecode and data and data.info then
+                fishRarity = data.info
+            else
+                fishRarity = "Unknown"
+                jay:Notify({
+                    Title = "Error",
+                    Content = "Invalid JSON response from API.",
+                    Duration = 2
+                })
+            end
         else
+            fishRarity = "Unknown"
             jay:Notify({
                 Title = "Error",
-                Content = "Failed to fetch fish rarity.",
+                Content = "Failed to fetch fish rarity. API might be down.",
                 Duration = 2
             })
-            fishRarity = "Unknown"
         end
     end)
 end
@@ -158,7 +170,6 @@ while true do
     elseif not findingReel then
         local reel = playerGui:FindFirstChild("reel")
         if not reel and fishName then
-            wait(1)
             sendWebhook(fishName, fishRarity)
             fishName = nil
             fishRarity = nil
