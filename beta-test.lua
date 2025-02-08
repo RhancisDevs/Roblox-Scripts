@@ -16,7 +16,7 @@ local lp = game.Players.LocalPlayer
 local playerGui = lp:FindFirstChild("PlayerGui")
 
 local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
-local repoURL = "https://raw.githubusercontent.com/RhancisDevs/Roblox-Scripts/main/fish-caught.lua"
+local repoURL = "https://raw.githubusercontent.com/RhancisDevs/Roblox-Scripts/main/beta-test.lua"
 local versionDir = "Jay Fisch"
 local versionFile = versionDir .. "/Latestver.json"
 
