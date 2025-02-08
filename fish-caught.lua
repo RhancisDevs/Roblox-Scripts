@@ -1,14 +1,14 @@
 local jay = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
-if getgenv().JayFishingLoggerRunning then
-        jay:Notify({
+if _G.JayLoggerRunning then
+    jay:Notify({
         Title = "Jay Logger | Fisch",
         Content = "Catch webhook is already running!",
         Duration = 2
     })
     return
 end
-getgenv().JayFishingLoggerRunning = true
+_G.JayLoggerRunning = true
 
 jay:Notify({
     Title = "Jay Logger | Fisch",
@@ -157,8 +157,7 @@ while true do
     elseif not findingReel then
         local reel = playerGui:FindFirstChild("reel")
         if not reel and fishName then
-            wait
-(1)
+            wait(1)
             sendWebhook(fishName, fishRarity)
             fishName = nil
             fishRarity = nil
