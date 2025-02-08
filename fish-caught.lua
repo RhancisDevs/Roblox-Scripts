@@ -77,8 +77,8 @@ local function sendWebhook(fish, rarity)
     if rarity and isDesiredRarity(rarity) or isDesiredFish(fish) then
         local username = lp.Name
         local leaderstats = lp:FindFirstChild("leaderstats")
-        local cash = leaderstats:FindFirstChild("C$")
-        local level = leaderstats:FindFirstChild("Level")
+        local cash = leaderstats and leaderstats:FindFirstChild("C$") and leaderstats["C$"].Value or "N/A"
+        local level = leaderstats and leaderstats:FindFirstChild("Level") and leaderstats.Level.Value or "N/A"
         
         local payload = {
             ["embeds"] = {
