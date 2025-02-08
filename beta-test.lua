@@ -1,7 +1,7 @@
 if _G.JayLoggerRunning then return end
 _G.JayLoggerRunning = true
 
-local current_ver = "1.0.0"
+local current_ver = "1.0.1"
 
 local jay = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
