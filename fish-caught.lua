@@ -76,7 +76,7 @@ end
 local function sendWebhook(fish, rarity)
     if rarity and isDesiredRarity(rarity) or isDesiredFish(fish) then
         local username = lp.Name
-        local coins = lp:FindFirstChild("leaderstats") and lp.leaderstats:FindFirstChild("Coins") and lp.leaderstats.Coins.Value or "N/A"
+        local coins = lp:FindFirstChild("leaderstats") and lp.leaderstats:FindFirstChild("C$") and lp.leaderstats.C$.Value or "N/A"
         local level = lp:FindFirstChild("leaderstats") and lp.leaderstats:FindFirstChild("Level") and lp.leaderstats.Level.Value or "N/A"
 
         local payload = {
@@ -86,17 +86,17 @@ local function sendWebhook(fish, rarity)
                     ["color"] = 16755200,
                     ["fields"] = {
                         {
-                            ["name"] = "→ Profile:",
+                            ["name"] = "•Profile:\n",
                             ["value"] = "> **Username:** " .. username,
                             ["inline"] = false
                         },
                         {
-                            ["name"] = "→ Stats:",
+                            ["name"] = "•Stats:\n",
                             ["value"] = "> **Coins:** C$" .. coins .. "\n> **Level:** " .. level,
                             ["inline"] = false
                         },
                         {
-                            ["name"] = "→ Caught:",
+                            ["name"] = "•Caught:\n",
                             ["value"] = "> **Name:** " .. fish .. "\n> **Rarity:** " .. (rarity or "Unknown"),
                             ["inline"] = false
                         }
