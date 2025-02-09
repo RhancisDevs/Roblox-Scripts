@@ -24,7 +24,12 @@ local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 local fishName = nil
 local findingReel = true
 
-local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke", "Orca", "Ancient Orca", "Ancient Kraken", "Kraken", "Lovestorm Eel Supercharged", "Lovestorm Eel", "Megalodon", "Ancient Megalodon", "Phantom Megalodon", "Mustard", "Long Pike", "Banana", "Treble Bass"}
+local desiredFish = {
+    "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke", "Orca", 
+    "Ancient Orca", "Ancient Kraken", "Kraken", "Lovestorm Eel Supercharged", 
+    "Lovestorm Eel", "Megalodon", "Ancient Megalodon", "Phantom Megalodon", 
+    "Mustard", "Long Pike", "Banana", "Treble Bass"
+}
 
 local function isDesiredFish(fish)
     for _, f in pairs(desiredFish) do
@@ -35,66 +40,29 @@ local function isDesiredFish(fish)
     return false
 end
 
-local function sendWebhook(fish)
-    if isDesiredFish(fish) then
-        local username = lp.Name
-        local leaderstats = lp:FindFirstChild("leaderstats")
-        local cash = leaderstats and leaderstats:FindFirstChild("C$") and leaderstats["C$"].Value or "N/A"
-        local level = leaderstats and leaderstats:FindFirstChild("Level") and leaderstats.Level.Value or "N/A"
+local function sendWebhook(payload)
+    pcall(function()
+        return request({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = game:GetService("HttpService"):JSONEncode(payload)
+        })
+    end)
+end
 
-        local payload = {
-            ["embeds"] = {
-                {
-                    ["title"] = "Jay Logger | Fisch",
-                    ["color"] = 16755200,
-                    ["fields"] = {
-                        {
-                            ["name"] = "•Profile:\n",
-                            ["value"] = "> **Username:** " .. username,
-                            ["inline"] = false
-                        },
-                        {
-                            ["name"] = "•Stats:\n",
-                            ["value"] = "> **Coins:** C$" .. cash .. "\n> **Level:** " .. level,
-                            ["inline"] = false
-                        },
-                        {
-                            ["name"] = "•Caught:\n",
-                            ["value"] = "> **Name:** " .. fish,
-                            ["inline"] = false
-                        }
-                    },
-                    ["footer"] = {
-                        ["text"] = "Fishing Logger | " .. os.date("%Y-%m-%d %H:%M:%S")
-                    }
-                }
+sendWebhook({
+    ["embeds"] = {
+        {
+            ["title"] = "Jay Catch Webhook | Fisch",
+            ["color"] = 16755200,
+            ["description"] = "> Username: " .. lp.Name .. "\n\nScript has been started. Please wait until a desired fish is caught. It will automatically notify you.",
+            ["footer"] = {
+                ["text"] = "Fishing Logger | " .. os.date("%Y-%m-%d %H:%M:%S")
             }
         }
-
-        local success = pcall(function()
-            return request({
-                Url = webhookURL,
-                Method = "POST",
-                Headers = { ["Content-Type"] = "application/json" },
-                Body = game:GetService("HttpService"):JSONEncode(payload)
-            })
-        end)
-
-        if not success then
-            jay:Notify({
-                Title = "Error",
-                Content = "Failed to send webhook.",
-                Duration = 2
-            })
-        else
-            jay:Notify({
-                Title = "Fish Caught!",
-                Content = "You caught a **" .. fish .. "**",
-                Duration = 2
-            })
-        end
-    end
-end
+    }
+})
 
 while true do
     wait(0.5)
@@ -117,8 +85,40 @@ while true do
     elseif not findingReel then
         local reel = playerGui:FindFirstChild("reel")
         if not reel and fishName then
-            wait(1)
-            sendWebhook(fishName)
+            if isDesiredFish(fishName) then
+                local leaderstats = lp:FindFirstChild("leaderstats")
+                local cash = leaderstats and leaderstats:FindFirstChild("C$") and leaderstats["C$"].Value or "N/A"
+                local level = leaderstats and leaderstats:FindFirstChild("Level") and leaderstats.Level.Value or "N/A"
+
+                sendWebhook({
+                    ["embeds"] = {
+                        {
+                            ["title"] = "Jay Logger | Fisch",
+                            ["color"] = 16755200,
+                            ["fields"] = {
+                                {
+                                    ["name"] = "•Profile:\n",
+                                    ["value"] = "> Username: " .. lp.Name,
+                                    ["inline"] = false
+                                },
+                                {
+                                    ["name"] = "•Stats:\n",
+                                    ["value"] = "> Coins: " .. cash .. "\n> Level: " .. level,
+                                    ["inline"] = false
+                                },
+                                {
+                                    ["name"] = "• Fish Caught:\n",
+                                    ["value"] = "> Name: " .. fishName,
+                                    ["inline"] = false
+                                }
+                            },
+                            ["footer"] = {
+                                ["text"] = "Fishing Logger | " .. os.date("%Y-%m-%d %H:%M:%S")
+                            }
+                        }
+                    }
+                })
+            end
             fishName = nil
             findingReel = true
         end
