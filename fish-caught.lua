@@ -139,7 +139,7 @@ local function sendWebhook(fish, rarity)
         else
             jay:Notify({
                 Title = "Fish Caught!",
-                Content = "You caught a **" .. fish .. "**",
+                Content = "You caught a " .. fish .. "",
                 SubContent = "Rarity: " .. (rarity or "Unknown"),
                 Duration = 2
             })
