@@ -25,7 +25,7 @@ local fishName = nil
 local fishRarity = nil
 local findingReel = true
 
-local desiredRarities = { "Exotic", "Secret" }
+local desiredRarities = { "Exotic", "Secret", "Limited" }
 local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke" }
 
 local function isDesiredRarity(rarity)
