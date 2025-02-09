@@ -22,20 +22,9 @@ local playerGui = lp:FindFirstChild("PlayerGui")
 
 local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 local fishName = nil
-local fishRarity = nil
 local findingReel = true
 
-local desiredRarities = { "Exotic", "Secret", "Limited" }
-local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke" }
-
-local function isDesiredRarity(rarity)
-    for _, r in pairs(desiredRarities) do
-        if r == rarity then
-            return true
-        end
-    end
-    return false
-end
+local desiredFish = { "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke", "Orca", "Ancient Orca", "Ancient Kraken", "Kraken", "Lovestorm Eel Supercharged", "Lovestorm Eel", "Megalodon", "Ancient Megalodon", "Phantom Megalodon", "Mustard", "Long Pike", "Banana", "Treble Bass"}
 
 local function isDesiredFish(fish)
     for _, f in pairs(desiredFish) do
@@ -46,52 +35,13 @@ local function isDesiredFish(fish)
     return false
 end
 
-local function fetchFishRarity(fish)
-    local httpService = game:GetService("HttpService")
-    local apiUrl = "https://ap-is-ivory.vercel.app/api/fish-info?name=" .. fish
-
-    spawn(function()
-        local success, response = pcall(function()
-            return request({
-                Url = apiUrl,
-                Method = "GET",
-                Headers = { ["Content-Type"] = "application/json" }
-            })
-        end)
-
-        if success and response and response.Body then
-            local successDecode, data = pcall(function()
-                return httpService:JSONDecode(response.Body)
-            end)
-
-            if successDecode and data and data.info then
-                fishRarity = data.info
-            else
-                fishRarity = "Unknown"
-                jay:Notify({
-                    Title = "Error",
-                    Content = "Invalid JSON response from API.",
-                    Duration = 2
-                })
-            end
-        else
-            fishRarity = "Unknown"
-            jay:Notify({
-                Title = "Error",
-                Content = "Failed to fetch fish rarity. API might be down.",
-                Duration = 2
-            })
-        end
-    end)
-end
-
-local function sendWebhook(fish, rarity)
-    if rarity and isDesiredRarity(rarity) or isDesiredFish(fish) then
+local function sendWebhook(fish)
+    if isDesiredFish(fish) then
         local username = lp.Name
         local leaderstats = lp:FindFirstChild("leaderstats")
         local cash = leaderstats and leaderstats:FindFirstChild("C$") and leaderstats["C$"].Value or "N/A"
         local level = leaderstats and leaderstats:FindFirstChild("Level") and leaderstats.Level.Value or "N/A"
-        
+
         local payload = {
             ["embeds"] = {
                 {
@@ -110,7 +60,7 @@ local function sendWebhook(fish, rarity)
                         },
                         {
                             ["name"] = "•Caught:\n",
-                            ["value"] = "> **Name:** " .. fish .. "\n> **Rarity:** " .. (rarity or "Unknown"),
+                            ["value"] = "> **Name:** " .. fish,
                             ["inline"] = false
                         }
                     },
@@ -121,7 +71,7 @@ local function sendWebhook(fish, rarity)
             }
         }
 
-        local success, response = pcall(function()
+        local success = pcall(function()
             return request({
                 Url = webhookURL,
                 Method = "POST",
@@ -139,8 +89,7 @@ local function sendWebhook(fish, rarity)
         else
             jay:Notify({
                 Title = "Fish Caught!",
-                Content = "You caught a " .. fish .. "",
-                SubContent = "Rarity: " .. (rarity or "Unknown"),
+                Content = "You caught a **" .. fish .. "**",
                 Duration = 2
             })
         end
@@ -161,8 +110,6 @@ while true do
                     local fish = nestedReel:FindFirstChild("fish")
                     if fish and fish:IsA("StringValue") then
                         fishName = fish.Value
-                        fishRarity = nil
-                        fetchFishRarity(fishName)
                     end
                 end
             end
@@ -170,9 +117,9 @@ while true do
     elseif not findingReel then
         local reel = playerGui:FindFirstChild("reel")
         if not reel and fishName then
-            sendWebhook(fishName, fishRarity)
+            wait(1)
+            sendWebhook(fishName)
             fishName = nil
-            fishRarity = nil
             findingReel = true
         end
     end
