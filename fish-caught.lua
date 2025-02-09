@@ -26,7 +26,7 @@ local findingReel = true
 
 local desiredFish = {
     "Great White Shark", "Great Hammerhead Shark", "Whale Shark", "Nuke", "Orca", 
-    "Ancient Orca", "Ancient Kraken", "Kraken", "Lovestorm Eel Supercharged", 
+    "Ancient Orca", "Ancient Kraken", "The Kraken", "Lovestorm Eel Supercharged", 
     "Lovestorm Eel", "Megalodon", "Ancient Megalodon", "Phantom Megalodon", 
     "Mustard", "Long Pike", "Banana", "Treble Bass"
 }
