@@ -1,5 +1,39 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local lp = game:GetService("Players").LocalPlayer
 local purchaseEvent = ReplicatedStorage:FindFirstChild("events") and ReplicatedStorage.events:FindFirstChild("purchase")
+
+local webhookURL = "YOUR_WEBHOOK_URL_HERE"
+
+local function sendWebhook()
+    pcall(function()
+        return request({
+            Url = webhookURL,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = HttpService:JSONEncode({
+                ["embeds"] = {
+                    {
+                        ["title"] = "Totem Purchase Notification",
+                        ["color"] = 16711680,
+                        ["fields"] = {
+                            {
+                                ["name"] = "• Profile:",
+                                ["value"] = "> Username: " .. lp.Name,
+                                ["inline"] = false
+                            },
+                            {
+                                ["name"] = "• Stats:",
+                                ["value"] = "> Coins: " .. (lp:FindFirstChild("leaderstats") and lp.leaderstats:FindFirstChild("C$") and lp.leaderstats["C$"].Value or "N/A"),
+                                ["inline"] = false
+                            }
+                        }
+                    }
+                }
+            })
+        })
+    end)
+end
 
 local function buyBait(amount)
     if purchaseEvent then
@@ -8,7 +42,7 @@ local function buyBait(amount)
 end
 
 local function purchaseItem(selectedTotem, amount)
-    if purchaseEvent and selectedTotem and amount and amount > 0 then
+    if purchaseEvent then
         purchaseEvent:FireServer(selectedTotem, "Item", nil, amount)
     end
 end
@@ -20,9 +54,10 @@ while true do
     task.wait(5)
     buyBait(100)
     task.wait(5)
-    purchaseItem("Aurora Totem", 500)
-    purchaseItem("Sundial Totem", 500)
-    purchaseItem("Poseidon Wrath Totem", 500)
+    purchaseItem("Aurora Totem", 250)
+    purchaseItem("Sundial Totem", 250)
+    purchaseItem("Poseidon Wrath Totem", 250)
+    sendWebhook()
     task.wait(5)
     buyBait(100)
     task.wait(10)
