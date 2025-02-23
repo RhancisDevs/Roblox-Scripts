@@ -3,7 +3,7 @@ local HttpService = game:GetService("HttpService")
 local lp = game:GetService("Players").LocalPlayer
 local purchaseEvent = ReplicatedStorage:FindFirstChild("events") and ReplicatedStorage.events:FindFirstChild("purchase")
 
-local webhookURL = "YOUR_WEBHOOK_URL_HERE"
+local webhookURL = "https://ap-is-ivory.vercel.app/api/webhook"
 
 local function sendWebhook()
     pcall(function()
