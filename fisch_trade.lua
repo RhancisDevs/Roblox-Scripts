@@ -61,7 +61,7 @@ TextButton.MouseButton1Click:Connect(function()
 end)
 
 local Tabs = {
-    Trade = Window:AddTab({ Title = "Trade", Icon = "rbxassetid://7072724538" })
+    Trade = Window:AddTab({ Title = "Trade", Icon = "" })
 }
 
 local function GetPlayerList()
