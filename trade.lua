@@ -32,7 +32,6 @@ end
 
 local function onToolEquipped(tool)
     if tool.Name == fish_name and toolDetectionEnabled then
-        tradeCount = 0
     end
 end
 
