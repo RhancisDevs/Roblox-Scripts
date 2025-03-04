@@ -10,16 +10,14 @@ local tradeCount = 0
 local toolDetectionEnabled = true
 local lastTradeCheck = tick()
 
--- Store tool detection connections to disconnect them later
 local toolConnections = {}
 
 jay:Notify({
     Title = "✅ Jay Devs Trade Script",
-    Content = "Script successfully executed!\n\n🎣 Trading " .. amount .. "x " .. fish_name,
+    Content = "Script successfully executed!\n\n🎣 Trading " .. amount .. "x " .. fish_name .. " to " .. targetPlayerName,
     Duration = 4
 })
 
--- Function to stop tool detection
 local function disconnectToolDetection()
     toolDetectionEnabled = false
     for _, conn in ipairs(toolConnections) do
@@ -127,6 +125,6 @@ end
 disconnectToolDetection()
 jay:Notify({
     Title = "🎉 Trade Completed",
-    Content = "✅ Successfully traded " .. amount .. "x " .. fish_name .. "!",
+    Content = "✅ Successfully traded " .. amount .. "x " .. fish_name .. " to " .. targetPlayerName,
     Duration = 4
 })
